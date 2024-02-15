@@ -1,6 +1,6 @@
 // Window
-pub const WW: usize = 1600;
-pub const WH: usize = 1000;
+pub const WINDOW_WIDTH: f32 = 1600.0;
+pub const WINDOW_HEIGHT: f32 = 1000.0;
 
 // Sprite
 pub const SPRITE_SHEET_PATH: &str = "assets.png";

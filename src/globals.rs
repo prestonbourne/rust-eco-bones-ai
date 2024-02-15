@@ -9,6 +9,7 @@ pub enum SimState {
     Loading,
     InitSim,
     Simulating,
+    Paused,
 }
 
 #[derive(Resource)]
@@ -20,6 +21,7 @@ pub struct Settings {
     pub show_plots: bool,
     pub show_plot_settings: bool,
     pub plot_options: PlotOptions,
+    pub time_scale: i32,
 }
 
 pub struct PlotOptions {
@@ -32,6 +34,7 @@ pub struct PlotOptions {
 }
 
 impl Default for Settings {
+
     fn default() -> Self {
         Self {
             camera_follow_boid: false,
@@ -41,6 +44,7 @@ impl Default for Settings {
             show_plots: false,
             show_plot_settings: false,
             plot_options: PlotOptions::default(),
+            time_scale: 1,
         }
     }
 }

@@ -35,7 +35,7 @@ cargo run
 ## Configurations
 - The project config file is located at `src/configs.rs`
 
-## Local Development 
+## Local Development
 
 ### Step #1: Install Dependencies
 
@@ -43,4 +43,4 @@ Execute `cargo build` in your terminal
 
 ### Step #2: Run the Binary
 
-Execute `cargo run`
+Execute `cargo run` to start the project

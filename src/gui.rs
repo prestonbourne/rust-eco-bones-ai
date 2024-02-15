@@ -28,7 +28,7 @@ impl Plugin for GuiPlugin {
                     draw_boid_debug_gizmos,
                     draw_predator_debug_gizmos,
                     draw_world_boundary,
-                    show_plot_settings,
+                    show_settings,
                 )
                     .run_if(in_state(SimState::Simulating)),
             );
@@ -100,12 +100,21 @@ fn draw_predator_debug_gizmos(
     }
 }
 
-fn show_plot_settings(mut contexts: EguiContexts, mut settings: ResMut<Settings>) {
+fn show_settings(mut contexts: EguiContexts, mut settings: ResMut<Settings>) {
     if !settings.show_plot_settings {
         return;
     }
 
     egui::Window::new("Settings").show(contexts.ctx_mut(), |ui| {
+        egui::CollapsingHeader::new("Time Scale")
+            .default_open(true)
+            .show(ui, |ui| {
+                ui.add(
+                    egui::Slider::new(&mut settings.time_scale, 1..=100)
+                        .show_value(true)
+                        .text("Time Scale"),
+                );
+            });
         egui::CollapsingHeader::new("Graphs")
             .default_open(true)
             .show(ui, |ui| {

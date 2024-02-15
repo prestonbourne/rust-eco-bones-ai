@@ -1,5 +1,7 @@
+use bevy::input::keyboard::KeyCode;
 use bevy::math::vec2;
 use bevy::prelude::*;
+use bevy::time::prelude::Time;
 use bevy::window::close_on_esc;
 use bevy_pancam::{PanCam, PanCamPlugin};
 
@@ -10,6 +12,26 @@ use ecosim::{
     world::WorldPlugin,
 };
 
+fn pause_simulation(
+    mut next_state: ResMut<NextState<SimState>>,
+    state: ResMut<State<SimState>>,
+    keyboard_input: Res<Input<KeyCode>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::Space) {
+        let current_state = state.get();
+
+        match current_state {
+            SimState::Simulating => next_state.set(SimState::Paused),
+            SimState::Paused => next_state.set(SimState::Simulating),
+            _ => {}
+        }
+    };
+}
+
+fn update_time_scale(mut time: ResMut<Time<Virtual>>, settings: Res<Settings>) {
+    time.set_relative_speed(settings.time_scale as f32);
+}
+
 fn main() {
     App::new()
         .add_state::<SimState>()
@@ -19,7 +41,7 @@ fn main() {
                 .set(WindowPlugin {
                     primary_window: Some(Window {
                         // mode: bevy::window::WindowMode::Fullscreen,
-                        resolution: (WW as f32, WH as f32).into(),
+                        resolution: (WINDOW_WIDTH, WINDOW_HEIGHT).into(),
                         title: "eco-sim".to_string(),
                         ..default()
                     }),
@@ -43,6 +65,8 @@ fn main() {
         )
         .add_systems(Update, handle_keyboard_input)
         .add_systems(Update, close_on_esc)
+        .add_systems(Update, pause_simulation)
+        .add_systems(Update, update_time_scale)
         .run();
 }
 

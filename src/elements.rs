@@ -90,15 +90,18 @@ fn replicate_consumables(
         (&Transform, &Consumable, &mut LastReplicationTs),
         With<Consumable>,
     >,
+    settings: Res<Settings>,
 ) {
     let num_food = food_query.iter().len();
     let num_poison = poison_query.iter().len();
     let is_populate_food = num_food < NUM_FOOD;
     let is_populate_poison = num_poison < NUM_POISON;
 
+    let scaled_replicate_cool_down = REPLICATION_COOLDOWN / settings.time_scale as f32;
+
     let mut rng = rand::thread_rng();
     for (transform, consumable, mut last_replication_ts) in consumable_query.iter_mut() {
-        if last_replication_ts.0.elapsed().as_secs_f32() < REPLICATION_COOLDOWN {
+        if last_replication_ts.0.elapsed().as_secs_f32() < scaled_replicate_cool_down {
             continue;
         }
         if rng.gen_range(0.0..1.0) < 0.8 {
